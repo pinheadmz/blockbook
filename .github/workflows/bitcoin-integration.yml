@@ -1,0 +1,32 @@
+name: bitcoin-integration
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  integration-test:
+    name: integration-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: test
+        run: make test-integration ARGS="-run='TestIntegration/bitcoin'"
+
+  backend-deploy-and-test-bitcoin:
+    name: backend-deploy-and-test-bitcoin
+    runs-on: ubuntu-latest
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: test
+        run: ./contrib/scripts/backend-deploy-and-test.sh bitcoin
